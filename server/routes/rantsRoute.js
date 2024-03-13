@@ -10,13 +10,14 @@ router.post('/', async (req, res)=>{
             !req.body.name
         ) {
             req.body.name = "Anonymous"
-        } else if(!req.body.description) {
-            return res.status(400).send({message: 'Please rant!'})
+        } else if(!req.body.description || !req.body.title) {
+            return res.status(400).send({message: 'Please add title & your rant!'})
         }
 
         const newRant = {
             name: req.body.name,
-            description: req.body.description
+            title: req.body.title,
+            description: req.body.description,
         };
 
         const rant = await Rant.create(newRant);
@@ -24,7 +25,7 @@ router.post('/', async (req, res)=>{
         return res.status(201).send(rant);
     } catch (error) {
         console.log(error.message);
-        res.status(500).send({message: error.message})
+        res.status(500).send({message: error.message});
 
     }
 })
@@ -64,8 +65,8 @@ router.put('/:id', async (req, res)=>{
             !req.body.name
         ) {
             req.body.name = "Anonymous"
-        } else if(!req.body.description) {
-            return res.status(400).send({message: 'Please rant!'})
+        } else if(!req.body.description || !req.body.title) {
+            return res.status(400).send({message: 'Please add a title & rant!'})
         }
         
         const {id} = req.params;
